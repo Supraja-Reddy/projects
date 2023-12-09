@@ -1,0 +1,113 @@
+//Arduino code for smart parking system
+
+#include <Servo.h>
+Servo motorentr;
+Servo motorexit;
+
+int irentr =2;
+int irslot1 = 3;
+int irslot2 =4;
+int irslot3= 1;
+int irexit =5;
+
+int Eledred = 8;
+int Eledgreen =7;
+int s1ledred =10 ;
+int s1ledgreen =11;
+int s2ledred = 12;
+int s2ledgreen =13;
+int s3ledred = A0;
+int s3ledgreen =A1;
+int exitled = A3;
+
+void setup()
+{
+  motorentr.attach(6);
+  motorexit.attach(9);
+  
+  pinMode(irentr,INPUT);
+  pinMode(irslot1,INPUT);
+  pinMode(irslot2,INPUT);
+  pinMode(irexit,INPUT);
+  
+  pinMode(Eledred,OUTPUT);
+  pinMode(Eledgreen,OUTPUT);
+  pinMode(s1ledred,OUTPUT);
+
+
+  pinMode(s1ledgreen,OUTPUT);
+  pinMode(s2ledred,OUTPUT);
+  pinMode(s2ledgreen,OUTPUT);
+  pinMode(s3ledred,OUTPUT);
+  pinMode(s3ledgreen,OUTPUT);
+  pinMode(exitled,OUTPUT);
+  digitalWrite(Eledgreen,HIGH);
+}
+
+void loop()
+{
+
+   if(digitalRead(irexit)==LOW)
+   {
+     analogWrite(exitled,255);
+     motorexit.write(90);
+     delay(1000);
+   }
+else
+   {
+     analogWrite(exitled,LOW);
+     motorexit.write(0);
+   }
+ 
+    if(digitalRead(irslot1)==LOW)
+    {
+      digitalWrite(s1ledred,HIGH);
+      digitalWrite(s1ledgreen,LOW);
+    }
+    else
+    {
+      digitalWrite(s1ledred,LOW); 
+      digitalWrite(s1ledgreen,HIGH);
+    }
+     if(digitalRead(irslot2)==LOW)
+    {
+
+      digitalWrite(s2ledred,HIGH);
+      digitalWrite(s2ledgreen,LOW);
+    }
+     else
+     {
+       digitalWrite(s2ledred,LOW);
+       digitalWrite(s2ledgreen,HIGH);
+  }
+if(digitalRead(irslot3)==LOW)
+    {
+      analogWrite(s3ledred,255);
+      digitalWrite(s3ledgreen,0);
+    }
+     else
+     {
+       analogWrite(s3ledred,0);
+       analogWrite(s3ledgreen,255);
+  }
+if(((digitalRead(irentr)==LOW)&&((digitalRead(irslot1)==HIGH)||
+(digitalRead(irslot2)==HIGH)||(digitalRead(irslot3)==HIGH))))
+   {
+     digitalWrite(Eledgreen,HIGH);
+     digitalWrite(Eledred,LOW);
+     motorentr.write(90);
+     delay(2000);
+   }
+   else if(((digitalRead(irentr)==LOW)&&((digitalRead(irslot1)==LOW)&&
+(digitalRead(irslot2)==LOW)&&(digitalRead(irslot3)==LOW))))
+   {
+     digitalWrite(Eledgreen,LOW);
+     digitalWrite(Eledred,HIGH);
+      motorentr.write(0);
+   }
+  else
+  {
+      motorentr.write(0);
+   }
+
+}
